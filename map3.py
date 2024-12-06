@@ -11,6 +11,7 @@ from datetime import date, datetime
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.LITERA])
+server = app.server
 
 
 df = pd.read_csv('datav3.csv')
@@ -149,7 +150,8 @@ app.layout = html.Div([
             dbc.Col([dcc.Graph(figure=fig2, id='map-1')])
         ], className='border p-2 m-2 rounded-3'
     ),
-    html.Div(['*This app is only for demonstration purposes. All the data are fake and randomly generated (with the exception of Duopharma Products) and does not contain any accurate nor sensitive information.'], className='text-danger')
+    html.Div(['*This app is only for demonstration purposes. All the data are fake and randomly generated (with the exception of Duopharma Products) and does not contain any accurate nor sensitive information.'],
+             className='text-danger border bg-light px-3')
 ])
 
 
