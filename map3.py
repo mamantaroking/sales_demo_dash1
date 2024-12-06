@@ -48,13 +48,35 @@ fig.update_geos(fitbounds='locations', visible=True, showframe=True,
 # fig.show()
 
 
-fig2 = px.scatter_map(df, lat="latitude", lon="longitude", size=df['sales_value']*10, color='sales_value', hover_name='city', zoom=5, height=650, color_continuous_scale='Tealgrn',) # animation_frame='datetime')
+fig2 = px.scatter_map(
+    df,
+    lat="latitude",
+    lon="longitude",
+    size=df['sales_value']*10,
+    color='sales_value',
+    hover_name='city',
+    zoom=5,
+    height=650,
+    color_continuous_scale='Tealgrn',
+    hover_data={
+        'sales_value': lambda x: f'The Sales Value is {x:,}',
+        'generic': True,
+        'latitude': True,
+        'longitude': True,
+        'datetime': True,
+},
+    # text='city'
+    # mapbox_style='carto-positron'
+) # animation_frame='datetime')
 fig2.update_traces(
     cluster=dict(
         enabled=False,
         color='lightcoral',
-        size=20,
-        step=1
+        # size=[20, 30, 40, 50],
+        size=[50, 40, 30, 20],
+        step=[-1, 10, 20, 30],
+        # step=[50, 40, 30, 20],
+        # step=10
     ),
     visible=True,
     # marker_size=df['sales_value'],
@@ -77,12 +99,12 @@ app.layout = html.Div([
                 ),
             ], href='https://duopharmabiotech.com/about-duopharma-biotech/', target="_blank", className='center',style={'width': '150px'}
             ),
-        ], className='p-2', width={'order': 'first', 'size': 1},
+        ], className='p-2', width={'order': 'first', 'size': 1}, sm=1
         ),
 
         dbc.Col([
             'Drug Sales Map'
-        ], className='mitr-bigger ms-2', width=2, align='center'
+        ], className='mitr-bigger ms-2', width=2, align='center', sm=1
         ),
 
     ], className='border shadow dp_gradient', justify='start'
@@ -131,7 +153,7 @@ app.layout = html.Div([
                 min_date_allowed=date(2023, 12, 1),
                 max_date_allowed=date(2024, 12, 6),
                 initial_visible_month=date(2023, 12, 6),
-                end_date=date(2024, 12, 6),
+                # end_date=date(2024, 12, 6),
                 className='p-2',
                 id='date-picker',
                 clearable=True,
@@ -157,7 +179,7 @@ app.layout = html.Div([
 
 # --------------------------------------------------- App Callbacks ----------------------------------------------------
 
-
+'''
 @app.callback(
     Output('map-1', 'figure', allow_duplicate=True),
     Input('dropdown-states', 'value'),
@@ -279,6 +301,7 @@ def update_output(start_date, end_date):
         fig2.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True,
                            marker_size=df['sales_value'])
         return fig2
+        '''
 
 
 @app.callback(
@@ -286,25 +309,72 @@ def update_output(start_date, end_date):
     Input('dropdown-generic', 'value'),
     prevent_initial_call=True
 )
-def update_map(value):
+def start_product(value):
     df = pd.read_csv('datav3.csv')
-    fig = map_store.update_product(value, df)
-    return fig
+    if value is not None:
+        df = df[df['generic'] == value]
+        # print(df['generic'])
+        fig3 = map_store.update_graph(df)
+        print('value is available')
+        return fig3
+    else:
+        print('value is None')
+        fig2 = map_store.update_graph(df)
+        return fig2
 
-
-'''@app.callback(
+@app.callback(
     Output('map-1', 'figure', allow_duplicate=True),
-    Input('dropdown-generic', 'value'),
-    Input('dropdown-states', 'value'),
+    Input('date-picker', 'start_date'),
+    Input('date-picker', 'end_date'),
     prevent_initial_call=True
 )
-def state_combine_product(product, states):
+def date_start(start, end):
     df = pd.read_csv('datav3.csv')
-    if states == 'Johor':
-        fig = map_store.johor_and_products(product, df)
-        return fig'''
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    if start and end is not None:
+        fig3 = map_store.check_time(start, end, df)
+        return fig3
+    else:
+        fig2 = map_store.update_graph(df)
+        return fig2
 
 
+@app.callback(
+    Output('map-1', 'figure', allow_duplicate=True),
+    Input('dropdown-states', 'value'),
+    State('date-picker', 'start_date'),
+    State('date-picker', 'end_date'),
+    State('dropdown-generic', 'value'),
+    prevent_initial_call=True
+)
+def state_start(states, start, end, product):
+    df = pd.read_csv('datav3.csv')
+    df['datetime'] = pd.to_datetime(df['datetime'])
+
+    if states is not None:
+        df = df[df['admin_name'] == states]
+        fig3 = map_store.update_graph(df)
+
+        if product is not None:
+            df = df[df['generic'] == product]
+            print(df['generic'])
+            fig3 = map_store.update_graph(df)
+
+            if start and end is not None:
+                fig3 = map_store.check_time(start, end, df)
+                return fig3
+            else:
+                return fig3
+
+        elif start and end is not None:
+            fig3 = map_store.check_time(start, end, df)
+            return fig3
+        else:
+            return fig3
+
+    else:
+        fig2 = map_store.update_graph(df)
+        return fig2
 
 
 
