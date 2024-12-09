@@ -52,7 +52,7 @@ fig2 = px.scatter_map(
     df,
     lat="latitude",
     lon="longitude",
-    size=df['sales_value']*10,
+    size='sales_value',
     color='sales_value',
     hover_name='city',
     zoom=5,
