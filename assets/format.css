@@ -10,6 +10,10 @@
     background-image: linear-gradient(to right, rgba(220, 230, 232), rgba(206, 236, 236), rgba(181, 207, 207));
 }
 
+.breadcrumb_gradient {
+    background-image: linear-gradient(to bottom right,rgba(255, 236, 228, 0.9), rgba(255, 237, 228, 0.9));
+}
+
 .center {
   display: block;
   margin-left: auto;

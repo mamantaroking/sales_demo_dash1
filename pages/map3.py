@@ -1,5 +1,5 @@
 import dash
-from dash import html, Dash, dcc, callback, Output, Input, State
+from dash import html, Dash, dcc, callback, Output, Input, State, ctx
 import pandas as pd
 import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
@@ -10,18 +10,17 @@ import map_store
 from datetime import date, datetime
 
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.LITERA])
-server = app.server
+dash.register_page(__name__, path='/')
 
 
-df = pd.read_csv('datav3.csv')
+df = pd.read_csv('datav4.csv')
 
 
 limits = [(0, 100000), (100001, 250000), (250001, 500000), (500000, 1000000), (1000000, 10000000)]
 
 fig = go.Figure()
 fig2 = go.Figure()
-geojson = json.load(open('malaysia_cloropeth_geojson.json'))
+# geojson = json.load(open('../malaysia_cloropeth_geojson.json'))
 
 bins = [0, 100000, 250000, 500000, 1000000, 10000000]
 labels = ['0 - 100000', '100000 - 250000', '250000 - 500000', '500000 - 1000000', '1000000 - 10000000']
@@ -65,10 +64,10 @@ fig2 = px.scatter_map(
         'latitude': True,
         'longitude': True,
         'datetime': True,
-},
+    },
     # text='city'
     # mapbox_style='carto-positron'
-) # animation_frame='datetime')
+    )  # animation_frame='datetime')
 fig2.update_traces(
     cluster=dict(
         enabled=False,
@@ -89,13 +88,13 @@ fig2.update_traces(
 # print(df_johor)
 
 
-app.layout = html.Div([
+layout = html.Div([
     dbc.Row([
 
         dbc.Col([
             html.A([
                 html.Img(
-                    id='header-logo', src=r'assets/dp_logo.png', alt='duopharma_logo', height='67px',
+                    id='header-logo', src=r'../assets/dp_logo.png', alt='duopharma_logo', height='67px',
                     width='100px', className='center'
                 ),
             ], href='https://duopharmabiotech.com/about-duopharma-biotech/', target="_blank", className='center',style={'width': '150px'}
@@ -104,14 +103,27 @@ app.layout = html.Div([
         ),
 
         dbc.Col([
-            'Drug Sales Map'
-        ], className='mitr-bigger ms-2', width=2, align='center', sm=1
+            dbc.Breadcrumb(items=[{'label': 'Drug Sales Map', 'active': True}], itemClassName='center mitr-bigger border py-2 px-3 shadow-sm breadcrumb_gradient rounded-3'),
+        ], className='mitr-bigger m-2', width=2, align='center', sm=2
+        ),
+        dbc.Col([
+            dbc.Breadcrumb(items=[{'label': 'Sales Table', 'active': False, 'href': '/table'}], itemClassName='center mitr-bigger border py-2 px-3 shadow-sm breadcrumb_gradient rounded-3'),
+        ], className='mitr-bigger m-2', width=2, align='center', sm=2
         ),
 
-    ], className='border shadow dp_gradient', justify='start'
+    ], className='border shadow dp_gradient', justify='start', align='center'
     ),
 
     dbc.Stack([
+
+        html.Div([
+            'City',
+            dcc.Dropdown(
+                df.city.sort_values().unique(), multi=False, className='p-2', id='dropdown-city', # style={'font-size': '11px'}
+                # value='Johor'
+            )
+        ], className='px-2', id='space-dropdown-city', style={'width': '20%', 'font-size': '11'}
+        ),
 
         html.Div([
             'State',
@@ -152,8 +164,8 @@ app.layout = html.Div([
             'Date Range',
             dcc.DatePickerRange(
                 min_date_allowed=date(2023, 12, 1),
-                max_date_allowed=date(2024, 12, 6),
-                initial_visible_month=date(2023, 12, 6),
+                # max_date_allowed=date(2024, 12, 6),
+                # initial_visible_month=date(2023, 12, 6),
                 # end_date=date(2024, 12, 6),
                 className='p-2',
                 id='date-picker',
@@ -162,6 +174,12 @@ app.layout = html.Div([
                 # style={'font-size': '11px'}
             ),
         ], className='px-2', style={'width': '30%', 'font-size': '11'}
+        ),
+
+        html.Div([
+            'Change Plot',
+            dbc.Button(['Sales Quantity'], id='cluster-btn', color='primary')
+        ], className='px-2', id='space-btn', style={'width': '15%', 'font-size': '11'}
         ),
 
     ], direction='horizontal', gap=2, className='border p-2 m-2 rounded-3'
@@ -173,7 +191,7 @@ app.layout = html.Div([
             dbc.Col([dcc.Graph(figure=fig2, id='map-1')])
         ], className='border p-2 m-2 rounded-3'
     ),
-    html.Div(['*This app is only for demonstration purposes. All the data are fake and randomly generated (with the exception of Duopharma Products) and does not contain any accurate nor sensitive information.'],
+    html.Div(['Disclaimer: This app is only for demonstration purposes. All the data are fake and randomly generated and does not contain any accurate nor sensitive information.'],
              className='text-danger border bg-light px-3')
 ])
 
@@ -181,7 +199,7 @@ app.layout = html.Div([
 # --------------------------------------------------- App Callbacks ----------------------------------------------------
 
 
-@app.callback(
+@callback(
     Output('map-1', 'figure', allow_duplicate=True),
     Input('dropdown-states', 'value'),
     Input('date-picker', 'start_date'),
@@ -190,7 +208,7 @@ app.layout = html.Div([
     prevent_initial_call=True
 )
 def state_start(states, start, end, product):
-    df = pd.read_csv('datav3.csv')
+    df = pd.read_csv('../datav4.csv')
     df['datetime'] = pd.to_datetime(df['datetime'])
 
     if states is not None:
@@ -244,8 +262,19 @@ def state_start(states, start, end, product):
         return fig2
 
 
+@callback(
+    Output('map-1', 'figure', allow_duplicate=True),
+    Input('cluster-btn', 'n_clicks'),
+    prevent_initial_call=True
+)
+def cluster_plot(click):
+    if 'cluster-btn' == ctx.triggered_id:
+        fig3 = px.scatter_map(df, lat="latitude", lon="longitude", size="sales_value", color='sales_value',
+                              hover_name='generic', zoom=4.5, height=650, color_continuous_scale='Tealgrn')
+        fig3.update_traces(cluster=dict(enabled=True, color='mediumaquamarine', size=20, step=1), visible=True,
+                           marker_size=df['sales_value'])
+        return fig3
 
 
-
-if __name__ == '__main__':
-    app.run(debug=True, port=8051)
+'''if __name__ == '__main__':
+    app.run(debug=True, port=8051)'''
