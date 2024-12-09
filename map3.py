@@ -59,7 +59,8 @@ fig2 = px.scatter_map(
     height=650,
     color_continuous_scale='Tealgrn',
     hover_data={
-        'sales_value': lambda x: f'The Sales Value is {x:,}',
+        # 'sales_value': lambda x: f'The Sales Value is {x:,}',
+        'sales_value': True,
         'generic': True,
         'latitude': True,
         'longitude': True,
