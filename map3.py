@@ -180,172 +180,13 @@ app.layout = html.Div([
 
 # --------------------------------------------------- App Callbacks ----------------------------------------------------
 
-'''
+
 @app.callback(
     Output('map-1', 'figure', allow_duplicate=True),
     Input('dropdown-states', 'value'),
-    prevent_initial_call=True
-)
-def update_map(value):
-    df = pd.read_csv('datav3.csv')
-    if value == 'Johor':
-        df3 = df[df['admin_name'] == 'Johor']
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Kedah':
-        df3 = df[df['admin_name'] == 'Kedah']
-        print(df3)
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Kelantan':
-        df3 = df[df['admin_name'] == 'Kelantan']
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Labuan':
-        df3 = df[df['admin_name'] == 'Labuan']
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Kuala Lumpur':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Melaka':
-        df3 = df[df['admin_name'] == 'Melaka']
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Negeri Sembilan':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Pahang':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Perak':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Perlis':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Pulau Pinang':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650,  color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Putrajaya':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650,  color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Sabah':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650,  color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Sarawak':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650,  color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Selangor':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650,  color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-    elif value == 'Terengganu':
-        df3 = df[df['admin_name'] == value]
-        fig3 = px.scatter_map(df3, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=7.5, height=650, color_continuous_scale='Tealgrn' )
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig3
-
-    else:
-        fig2 = px.scatter_map(df, lat="latitude", lon="longitude", size='sales_value', color='sales_value', hover_name='city', zoom=4.5, height=650,  color_continuous_scale='Tealgrn')
-        fig2.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df['sales_value'])
-        return fig2
-
-
-@callback(
-    Output('map-1', 'figure', allow_duplicate=True),
-    Input('date-picker', 'start_date'),
-    State('date-picker', 'end_date'),
-    prevent_initial_call=True
-)
-def update_output(start_date, end_date):
-    df = pd.read_csv('datav3.csv')
-    df['datetime'] = pd.to_datetime(df['datetime'])
-    if start_date and end_date is not None:
-        datetime.strptime(start_date, '%Y-%m-%d')
-        print(start_date, type(start_date))
-        datetime.strptime(end_date, '%Y-%m-%d')
-        df2 = df[(df['datetime'] > start_date) & (df['datetime'] < end_date)]
-        # df[df['datetime'] > start_date]
-        # df[df['datetime'] < end_date]
-        # print(df['datetime'])
-        fig3 = px.scatter_map(df2, lat="latitude", lon="longitude", size="sales_value", color='sales_value', hover_name='city', zoom=5, height=650, color_continuous_scale='Tealgrn')
-        fig3.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True, marker_size=df2['sales_value'])
-        return fig3
-    else:
-        fig2 = px.scatter_map(df, lat="latitude", lon="longitude", size='sales_value', color='sales_value',
-                              hover_name='city', zoom=5, height=650, color_continuous_scale='Tealgrn')
-        fig2.update_traces(cluster=dict(enabled=False, color='lightcoral', size=20, step=1), visible=True,
-                           marker_size=df['sales_value'])
-        return fig2
-        '''
-
-
-@app.callback(
-    Output('map-1', 'figure', allow_duplicate=True),
-    Input('dropdown-generic', 'value'),
-    prevent_initial_call=True
-)
-def start_product(value):
-    df = pd.read_csv('datav3.csv')
-    if value is not None:
-        df = df[df['generic'] == value]
-        # print(df['generic'])
-        fig3 = map_store.update_graph(df)
-        print('value is available')
-        return fig3
-    else:
-        print('value is None')
-        fig2 = map_store.update_graph(df)
-        return fig2
-
-@app.callback(
-    Output('map-1', 'figure', allow_duplicate=True),
     Input('date-picker', 'start_date'),
     Input('date-picker', 'end_date'),
-    prevent_initial_call=True
-)
-def date_start(start, end):
-    df = pd.read_csv('datav3.csv')
-    df['datetime'] = pd.to_datetime(df['datetime'])
-    if start and end is not None:
-        fig3 = map_store.check_time(start, end, df)
-        return fig3
-    else:
-        fig2 = map_store.update_graph(df)
-        return fig2
-
-
-@app.callback(
-    Output('map-1', 'figure', allow_duplicate=True),
-    Input('dropdown-states', 'value'),
-    State('date-picker', 'start_date'),
-    State('date-picker', 'end_date'),
-    State('dropdown-generic', 'value'),
+    Input('dropdown-generic', 'value'),
     prevent_initial_call=True
 )
 def state_start(states, start, end, product):
@@ -358,7 +199,7 @@ def state_start(states, start, end, product):
 
         if product is not None:
             df = df[df['generic'] == product]
-            print(df['generic'])
+            # print(df['generic'])
             fig3 = map_store.update_graph(df)
 
             if start and end is not None:
@@ -372,6 +213,31 @@ def state_start(states, start, end, product):
             return fig3
         else:
             return fig3
+
+    elif product is not None:
+        df = df[df['generic'] == product]
+        # print(df['generic'])
+        fig3 = map_store.update_graph(df)
+
+        if states is not None:
+            df = df[df['admin_name'] == states]
+            fig3 = map_store.update_graph(df)
+
+            if start and end is not None:
+                fig3 = map_store.check_time(start, end, df)
+                return fig3
+            else:
+                return fig3
+
+        elif start and end is not None:
+            fig3 = map_store.check_time(start, end, df)
+            return fig3
+        else:
+            return fig3
+
+    elif start and end is not None:
+        fig3 = map_store.check_time(start, end, df)
+        return fig3
 
     else:
         fig2 = map_store.update_graph(df)
