@@ -16,7 +16,7 @@ external_stylesheets = ["https://fonts.googleapis.com/css2?family=Passion+One:wg
 
 # ------------------------------------------------- App Initialization -------------------------------------------------
 app = Dash(__name__, external_stylesheets=external_stylesheets)
-
+server = app.server
 
 getRowStyle = {
     "styleConditions": [
