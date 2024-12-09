@@ -208,7 +208,7 @@ layout = html.Div([
     prevent_initial_call=True
 )
 def state_start(states, start, end, product):
-    df = pd.read_csv('../datav4.csv')
+    df = pd.read_csv('datav4.csv')
     df['datetime'] = pd.to_datetime(df['datetime'])
 
     if states is not None:
