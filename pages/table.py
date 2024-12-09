@@ -157,7 +157,7 @@ layout = html.Div([
     ),
     html.Div(['Disclaimer: This app is only for demonstration purposes. All the data are fake and randomly generated and does not contain any accurate nor sensitive information.'],
              className='text-danger border bg-light px-3')
-])
+], className='bg-white')
 
 
 # --------------------------------------------------- App Callbacks ----------------------------------------------------
