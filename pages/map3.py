@@ -15,8 +15,8 @@ external_stylesheets = ["https://fonts.googleapis.com/css2?family=Passion+One:wg
                         dbc.themes.LITERA]
 
 # ------------------------------------------------- App Initialization -------------------------------------------------
-app = Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
+'''app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server'''
 
 getRowStyle = {
     "styleConditions": [
@@ -27,7 +27,7 @@ getRowStyle = {
     ]
 }
 
-# dash.register_page(__name__, path='/')
+dash.register_page(__name__, path='/')
 
 
 df = pd.read_csv('datav4.csv')
@@ -76,6 +76,8 @@ fig2 = px.scatter_map(
     color_continuous_scale='Tealgrn',
     hover_data={
         # 'sales_value': lambda x: f'The Sales Value is {x:,}',
+        'city': True,
+        'admin_name': True,
         'sales_value': True,
         'generic': True,
         'latitude': True,
@@ -105,7 +107,7 @@ fig2.update_traces(
 # print(df_johor)
 
 
-app.layout = html.Div([
+layout = html.Div([
     dbc.Row([
 
         dbc.Col([
@@ -118,16 +120,16 @@ app.layout = html.Div([
             ),
         ], className='p-2', width={'order': 'first', 'size': 1}, sm=1
         ),
-        dbc.Col(['Drug Sales Map'], className='mitr-bigger m-2', width=2, align='center', sm=2),
+        # dbc.Col(['Drug Sales Map'], className='mitr-bigger m-2', width=2, align='center', sm=2),
 
-        # dbc.Col([
-        #     dbc.Breadcrumb(items=[{'label': 'Drug Sales Map', 'active': True}], itemClassName='center mitr-bigger border py-2 px-3 shadow-sm breadcrumb_gradient rounded-3'),
-        # ], className='mitr-bigger m-2', width=2, align='center', sm=2
-        # ),
-        # dbc.Col([
-        #     dbc.Breadcrumb(items=[{'label': 'Sales Table', 'active': False, 'href': '/table'}], itemClassName='center mitr-bigger border py-2 px-3 shadow-sm breadcrumb_gradient rounded-3'),
-        # ], className='mitr-bigger m-2', width=2, align='center', sm=2
-        # ),
+        dbc.Col([
+            dbc.Breadcrumb(items=[{'label': 'Drug Sales Map', 'active': True}], itemClassName='center mitr-bigger py-2 px-3'),
+        ], className='mitr-bigger m-2', width=2, align='center', sm=2
+        ),
+        dbc.Col([
+            dbc.Breadcrumb(items=[{'label': 'Sales Table', 'active': False, 'href': '/geocode'}], itemClassName='center mitr-bigger py-2 px-3'),
+        ], className='mitr-bigger m-2', width=2, align='center', sm=2
+        ),
 
     ], className='border shadow dp_gradient', justify='start', align='center'
     ),
@@ -214,7 +216,7 @@ app.layout = html.Div([
                 id='grid',
                 rowData=df.to_dict("records"),
                 # columnDefs=[{"field": i} for i in new_count_df.columns],
-                columnDefs=[{"field": i} for i in df.columns    ],
+                columnDefs=[{"field": i} for i in df.columns[1:]],
                 getRowStyle=getRowStyle,
                 dashGridOptions={
                     'rowSelection': 'single',
@@ -246,7 +248,7 @@ app.layout = html.Div([
 # --------------------------------------------------- App Callbacks ----------------------------------------------------
 
 
-@app.callback(
+@callback(
     Output('map-1', 'figure', allow_duplicate=True),
     Input('dropdown-states', 'value'),
     Input('date-picker', 'start_date'),
@@ -441,7 +443,7 @@ def cluster_plot(click):
         return fig3'''
 
 
-@app.callback(
+@callback(
     Output('map-1', 'figure', allow_duplicate=True),
     Input('grid', 'selectedRows'),
     prevent_initial_call=True
@@ -458,5 +460,5 @@ def click_on_grid(selected_rows):
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True, port=8051)
+'''if __name__ == '__main__':
+    app.run(debug=True, port=8051)'''
