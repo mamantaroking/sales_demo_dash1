@@ -127,7 +127,7 @@ layout = html.Div([
         ], className='mitr-bigger m-2', width=2, align='center', sm=2
         ),
         dbc.Col([
-            dbc.Breadcrumb(items=[{'label': 'Sales Table', 'active': False, 'href': '/geocode'}], itemClassName='center mitr-bigger py-2 px-3'),
+            dbc.Breadcrumb(items=[{'label': 'Geocoded Map', 'active': False, 'href': '/geocode'}], itemClassName='center mitr-bigger py-2 px-3'),
         ], className='mitr-bigger m-2', width=2, align='center', sm=2
         ),
 
