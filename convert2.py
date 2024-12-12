@@ -22,7 +22,7 @@ external_stylesheets = ["https://fonts.googleapis.com/css2?family=Passion+One:wg
 # ------------------------------------------------- App Initialization -------------------------------------------------
 # app = Dash(__name__, external_stylesheets=external_stylesheets)
 # server = app.server
-dash.register_page(__name__, path='/geocode')
+dash.register_page(__name__, path='/geocode_2')
 
 getRowStyle = {
     "styleConditions": [
@@ -97,7 +97,7 @@ layout = html.Div([
         dbc.Col([
             html.A([
                 html.Img(
-                    id='header-logo', src=r'../assets/dp_logo.png', alt='duopharma_logo', height='67px',
+                    id='header-logo', src=r'assets/dp_logo.png', alt='duopharma_logo', height='67px',
                     width='100px', className='center'
                 ),
             ], href='https://duopharmabiotech.com/about-duopharma-biotech/', target="_blank", className='center',style={'width': '150px'}
@@ -160,7 +160,7 @@ layout = html.Div([
 def click_on_grid(selected_rows):
     df = pd.read_csv('geocoded.csv')
     if not selected_rows:
-        fig = px.scatter_map(df, lat="latitude", lon="longitude", hover_name='party', zoom=4.5, height=650,
+        fig = px.scatter_map(df, lat="latitude", lon="longitude", hover_name='party', zoom=4.5, height=650, size_max=30,
                              size='sales',
                              color='units', color_continuous_scale='Tealgrn',
                              hover_data={
@@ -176,7 +176,7 @@ def click_on_grid(selected_rows):
         return fig
     row = [s['id'] for s in selected_rows]
     df = df[df.id.isin(row)]
-    fig = px.scatter_map(df, lat="latitude", lon="longitude", hover_name='party', zoom=4.5, height=650, size='sales',
+    fig = px.scatter_map(df, lat="latitude", lon="longitude", hover_name='party', zoom=8, size_max=30, height=650, size='sales',
                          color='units', color_continuous_scale='Tealgrn',
                          hover_data={
                              'sales': True,
